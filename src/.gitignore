@@ -1,0 +1,8 @@
+InferenceEngines/_build/
+*.hs
+*~
+*.cmi
+*.cmo
+*.o
+*.cmx
+*.cmxa

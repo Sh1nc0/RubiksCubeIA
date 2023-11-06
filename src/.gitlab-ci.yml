@@ -1,0 +1,39 @@
+image : ocaml/opam
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  before_script :
+    - opam --version
+    - ocamlc --version
+    - opam install batteries
+    - cd InferenceEngines/lib
+  script:
+    - echo "Compiling the code..."
+    - touch .depend && make depend && make
+    - echo "Compile complete."
+  artifacts:
+    paths:
+      - InferenceEngines/lib/lib1.cma
+      - InferenceEngines/lib/lib1.cmxa
+      - InferenceEngines/lib/Utilities/*.cmi
+      - InferenceEngines/lib/Problem/*.cmi
+      - InferenceEngines/lib/Solver/Tree/*.cmi
+      - InferenceEngines/lib/Solver/IteratedDeepening/*.cmi
+      - InferenceEngines/lib/Solver/IteratedDeepeningTree/*.cmi
+
+unit-test-job:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  before_script:
+    - opam install batteries
+    - cd InferenceEngines
+    - cd test
+    - touch .depend && make depend && make
+  script:
+    - echo "Running unit tests... "
+    - make test
+    - echo "Done."
+
