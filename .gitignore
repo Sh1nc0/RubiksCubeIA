@@ -1,4 +1,4 @@
-InferenceEngines/_build/
+src/InferenceEngines/_build/
 *.hs
 *~
 *.cmi
