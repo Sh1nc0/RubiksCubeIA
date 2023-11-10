@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="Start" href="index.html">
+<link rel="next" href="Pairs.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Miscellaneous" rel="Chapter" href="Miscellaneous.html">
+<link title="Pairs" rel="Chapter" href="Pairs.html">
+<link title="Additive" rel="Chapter" href="Additive.html">
+<link title="Ord" rel="Chapter" href="Ord.html">
+<link title="StateProblem" rel="Chapter" href="StateProblem.html">
+<link title="DepthLimit" rel="Chapter" href="DepthLimit.html">
+<link title="Naive" rel="Chapter" href="Naive.html">
+<link title="Meta" rel="Chapter" href="Meta.html">
+<link title="IDS" rel="Chapter" href="IDS.html"><link title="Cartesian product" rel="Section" href="#2_Cartesianproduct">
+<link title="Additional functions on lists" rel="Section" href="#2_Additionalfunctionsonlists">
+<title>Miscellaneous</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Pairs.html" title="Pairs">Next</a>
+</div>
+<h1>Module <a href="type_Miscellaneous.html">Miscellaneous</a></h1>
+
+<pre><span id="MODULEMiscellaneous"><span class="keyword">module</span> Miscellaneous</span>: <code class="code">sig</code> <a href="Miscellaneous.html">..</a> <code class="code">end</code></pre><div class="info module top">
+<div class="info-desc">
+<p>Various Functions Used in this Library</p>
+
+<p>This module groups together a number of functions that are not present in standard libraries but used as utilities in various parts of the package.</p>
+</div>
+<ul class="info-attributes">
+<li><b>Author(s):</b> :  (c) February 28, 2019, José Martinez, École polytechnique de l'université de Nantes</li>
+</ul>
+</div>
+<hr width="100%">
+
+<pre><span id="VALconsecutives"><span class="keyword">val</span> consecutives</span> : <code class="type">'a list -&gt; ('a * 'a) list</code></pre><div class="info ">
+<div class="info-desc">
+<p>A function that returns the pairs of consecutive elements in a list.</p>
+
+<p><b>Example: </b></p>
+
+<p><code class="code">consecutives "hello"</code> returns
+<code class="code"> [('h','e'),('e','l'),('l','l'),('l','o')] </code></p>
+
+<p><b>Post-condition: </b></p>
+
+<ul>
+<li>The tail of the list can be rebuilt from the second components of the pairs.</li>
+<li>Unless the list contains a single element, it can be rebuilt from the pairs.</li>
+</ul>
+<p><b>Time complexity</b></p>
+
+<p>O(n) where n is the number of elements in the list.</p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> the list of pairs of consecutive elements of the parameter.</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALsplits"><span class="keyword">val</span> splits</span> : <code class="type">'a list -&gt; ('a list * 'a list) list</code></pre><div class="info ">
+<div class="info-desc">
+<p>A function that mimics part of the Prolog  "append" predicate.
+ It splits a list at every index, returning a list of pairs of sub-lists.</p>
+
+<p><b>Example:</b></p>
+
+<p><code class="code">splits "hello"</code> returns <code class="code"> [("","hello"),("h","ello"),("he","llo"),("hel","lo"),("hell","o"),("hello","")]</code></p>
+
+<p><b>Post-condition: </b></p>
+
+<ul>
+<li>The concatenation of each pair gives back the original list.</li>
+</ul>
+<p><b>Time complexity: </b></p>
+
+<p>O(n) where n is the number of elements in the list.</p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> the decompositions of xs into two sub-lists, including the case where one of them is empty.</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+a list of elements
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALsplits3"><span class="keyword">val</span> splits3</span> : <code class="type">'a list -&gt; ('a list * 'a list * 'a list) list</code></pre><div class="info ">
+<div class="info-desc">
+<p>An extension of 'splits' that splits a list into three consecutive sub-lists.</p>
+
+<p><b>Example: </b>
+<code class="code">splits "hello"</code>
+ returns a lengthy
+<code class="code">[("","","hello");("","h","ello");("","he","llo");("","hel","lo");("","hell","o");("","hello","");("h","","ello");("h","e","llo");("h","el","lo");("h","ell","o");("h","ello","");("he","","llo");("he","l","lo");("he","ll","o");("he","llo","");("hel","","lo");("hel","l","o");("hel","lo","");("hell","","o");("hell","o","")]</code></p>
+
+<p><b>Post-condition: </b></p>
+<ul>
+<li>The concatenation of the sub-lists gives back the original list.</li>
+</ul>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> he decompositions of xs into three consecutive, possibly empty, sub-lists.
+
+Note that in the above example <code class="code">("hello","","")</code> is not in the result but in practice we do not need it.</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+a list of elements
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALallDifferent"><span class="keyword">val</span> allDifferent</span> : <code class="type">('a -&gt; 'a -&gt; bool) -&gt; 'a list -&gt; bool</code></pre><div class="info ">
+<div class="info-desc">
+<p>A predicate that determines whether all the elements of a list are different from each other.</p>
+
+<p><b>Example: </b>
+<code class="code">allDifferent "hello"</code></p>
+
+<p>returns</p>
+
+<p><code class="code">False</code></p>
+
+<p><b>Time complexity:</b></p>
+
+<p>O(n^2) where n is the length of the list since we do not impose the 'Ord' constraint</p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> true if, and only if, all the elements are pairwise distinct.</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+eq</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a -&gt; 'a -&gt; bool</code><div>
+qn equality predicate
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+a list of element, comparable by that equality
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALkronecker"><span class="keyword">val</span> kronecker</span> : <code class="type">bool -&gt; int</code></pre><div class="info ">
+<div class="info-desc">
+<p>The Kronecker operator simply translates a boolean into 0 or 1.</p>
+
+<p><b>Example:</b></p>
+
+<p><code class="code">kronecker (allDifferent "hello")</code>
+returns
+<code class="code">0</code></p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> the translation of the argument as a natural integer, respectively 0 or 1.</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+b</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">bool</code><div>
+a boolean, False or True
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALis_sorted"><span class="keyword">val</span> is_sorted</span> : <code class="type">('a -&gt; 'a -&gt; bool) -&gt; 'a list -&gt; bool</code></pre><div class="info ">
+<div class="info-desc">
+<p>Checks whether a list of ordered elements appear in a given order.</p>
+
+<p><b>Example:</b></p>
+
+<p><code class="code">is_sorted (&lt;) [1;2;0]</code> 
+returns
+<code class="code">False</code></p>
+</div>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+ord</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a -&gt; 'a -&gt; bool</code><div>
+a comparison predicate
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+a list of elements
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALstrictlyIncreasing"><span class="keyword">val</span> strictlyIncreasing</span> : <code class="type">'a list -&gt; bool</code></pre><div class="info ">
+<div class="info-desc">
+<p>Checks whether a list of ordered elements appear in increasing order. Uses standard (&lt;) as comparison for <a href="Miscellaneous.html#VALis_sorted"> is_sorted</a> above.</p>
+
+<p><b>Example:</b></p>
+
+<p><code class="code">strictlyIncreasing [1;2;0]</code> 
+returns
+<code class="code">False</code></p>
+</div>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+a list of elements
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+<h3 id="2_Cartesianproduct">Cartesian product</h3>
+<pre><span id="VALcartesianProduct"><span class="keyword">val</span> cartesianProduct</span> : <code class="type">'a list -&gt; 'b list -&gt; ('a * 'b) BatSet.t</code></pre><div class="info ">
+<div class="info-desc">
+<p>Set of all the couples that can be built from two sets. We use pervasive polymorphic comparaison (&lt;).</p>
+
+<p>We use <code class="code">BatSet.t</code> to represent sets, form the library "OCaml Batteries Included" instead of the module <code class="code">Set</code> of the standard library because it is easier to use when we don't need specific comparison operations.</p>
+
+<p><b>Nota</b> Since we are actually working with lists, there can be duplicates in them.</p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> a set containing all the couples consisting of an element of <code class="code">xs</code> and an element of <code class="code">ys</code>.</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+: a collection of some elements
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+ys</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'b list</code><div>
+: a collection of other elements
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+<h3 id="2_Additionalfunctionsonlists">Additional functions on lists</h3>
+<pre><span id="VALlast"><span class="keyword">val</span> last</span> : <code class="type">'a list -&gt; 'a</code></pre><div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+xs</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a list</code><div>
+
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+</body></html>

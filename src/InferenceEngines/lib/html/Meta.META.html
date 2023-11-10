@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="Start" href="index.html">
+<link rel="Up" href="Meta.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Miscellaneous" rel="Chapter" href="Miscellaneous.html">
+<link title="Pairs" rel="Chapter" href="Pairs.html">
+<link title="Additive" rel="Chapter" href="Additive.html">
+<link title="Ord" rel="Chapter" href="Ord.html">
+<link title="StateProblem" rel="Chapter" href="StateProblem.html">
+<link title="DepthLimit" rel="Chapter" href="DepthLimit.html">
+<link title="Naive" rel="Chapter" href="Naive.html">
+<link title="Meta" rel="Chapter" href="Meta.html">
+<link title="IDS" rel="Chapter" href="IDS.html"><title>Meta.META</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="Meta.html" title="Meta">Up</a>
+&nbsp;</div>
+<h1>Functor <a href="type_Meta.META.html">Meta.META</a></h1>
+
+<pre><span id="MODULEMETA"><span class="keyword">module</span> META</span> <code class="code">(</code><code class="code">SP</code><code class="code"> : </code><code class="type"><a href="StateProblem.STATEPROBLEM.html">StateProblem.STATEPROBLEM</a></code><code class="code">) </code>: <code class="code">sig</code> <a href="Meta.META.html">..</a> <code class="code">end</code></pre><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%">
+<code>SP</code></td>
+<td align="center" valign="top">:</td>
+<td><code class="type"><a href="StateProblem.STATEPROBLEM.html">StateProblem.STATEPROBLEM</a></code>
+</table>
+</td>
+</tr>
+</table>
+<hr width="100%">
+<p>A Meta Backtracking Inference Engine with Depth Limit but Iterated Deepening</p>
+
+<p><b>Copyright  :</b>  (c) March 12, 2019, July 15, 2022, José Martinez, École polytechnique de l'université de Nantes</p>
+
+<p><b>License    :</b>  AllRightsReserved</p>
+
+<p><b>Maintainer :</b> Julien Cohen for the OCaml version</p>
+
+<p><b>Stability  :</b>  Experimental, Linux</p>
+
+<p><b>Portability:</b>  OCaml 4.14.0</p>
+
+<p>The naïve approach, i.e., "Solver.Naive", has an issue with /infinite/ graphs.
+In order to address this main problems of the naïve approach, the depth-limited algorithm solver, i.e., "Solver.DepthLimit", introduces an /unnatural/ parameter.
+It is difficult to tune the "max depth" hyper-parameter:</p>
+
+<ul>
+<li>Should it be /too small/, solutions that exist would be missed.</li>
+</ul>
+<ul>
+<li>Should it be /too large/, we could end up:
+   <ul>
+<li>exploring large sterile branches, and\/or</li>
+<li>finding largely sub-optimal solutions, as well as</li>
+<li>spending a lot of time in the search.</li>
+</ul>
+</li>
+</ul>
+<p>The /iterated/ deepening approach module avoids these issues.
+A maximal depth is still required.
+However, it is no longer the maximal depth of a single search but the maximal depth of several searches, from a minimal depth of 0 up to the maximal depth, incrementing it after each restart, i.e., when no solution has been found at the previous tentative depth limit.</p>
+
+<p>This solver is both /effective/ and rather /efficient/.</p>
+
+<ul>
+<li>The first problem is solved since the solutions which are not deep will be found first.
+     The second problem is solved for the same reason.
+     Of course, the issue of infinite graph is solved by the depth parameter, as of "Solver.DepthLimit".
+     Basically, it repeats searches at deeper and deeper levels in order to find a solution.
+     Therefore, it becomes a kind of /breadth-first/ search.
+     Hence, it is optimal with respect to the length of the solution (not necessarily its cost).
+     Also, it is complete as long as the state graph is locally finite (i.e., no transformation generates an infinity of successor states).</li>
+</ul>
+<ul>
+<li>This may seem very costly ...
+     However, its complexity is /only and at most twice/ the complexity of the underlying search!
+     Effectively, running iteratively an exponential algorithm at most doubles its time complexity, which is a very small multiplicative constant!
+     Finally, its asymptotic time complexity is the same as the underlying depth-limited search.
+     Therefore, it is a /very good candidate/ for conducting recursive searches.</li>
+</ul>
+<p>However, this is a /meta/ algorithm.
+It relies on any solver that uses the depth limit.</p>
+<p><b>Translation to OCaml.</b> In the Haskell code of the library, if we only access to the first result in <code class="code">metaSolver _ _ _</code>, the minimal number of iterations to find a solution will be executed and the other iterations will not be executed, because of the laziness. If we want a solution with a better cost (and more transitions), we can read the following elements of the result, and then the computation will trigger the other iterations.</p>
+
+<p>In the Ocaml translation of the library, we provide two operations</p>
+
+<ul>
+<li>stop at the first iteration where some solutions have been found. </li>
+</ul>
+<ul>
+<li>stop at the first iteration where some solutions under a given cost have been found.</li>
+</ul>
+<p>A meta backtracking solver with a depth limit, hence avoiding infinite searches as well as ensuring the minimal solution, in the number of transformations, not the cost itself, are found.</p>
+
+<p><b>Post-condition.</b></p>
+
+<ul>
+<li>For any solution, the sequence of transformations is indeed a solution.</li>
+</ul>
+<ul>
+<li>No solution can be of length greater than the limit.</li>
+</ul>
+<ul>
+<li>Solutions appear in non-decreasing lengths.</li>
+</ul>
+<p><b>Nota.</b>  These post-conditions have to be ensured by any specific implementation.</p>
+
+<pre><span id="VALmetaSolver_first"><span class="keyword">val</span> metaSolver_first</span> : <code class="type">int -&gt; (int -&gt; 'a -&gt; 'b list) -&gt; 'a -&gt; 'b list</code></pre><div class="info ">
+<div class="info-desc">
+<p><b>Translation to OCaml.</b> In the Haskell code of the library, if we only access to the first result in <code class="code">metaSolver _ _ _</code>, the minimal number of iterations to find a solution will be executed and the other iterations will not be executed, because of the laziness. If we want a solution with a better cost (and more transitions), we can read the following elements of the result, and then the computation will trigger the other iterations.</p>
+
+<p>In the Ocaml translation, we stop at the first iteration where some solutions have been found.</p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> a list of solutions, each one being a list of transformations to apply in sequence from the initial state in order to reach a final state, i.e., solve the problem at hand</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+dMax</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">int</code><div>
+the maximal depth at which the search can be conducted from the initial state
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+solver</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">int -&gt; 'a -&gt; 'b list</code><div>
+a solver that accepts a depth limit as its first parameter
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+i</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a</code><div>
+an initial state
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+
+<pre><span id="VALmetaSolver_with_cost"><span class="keyword">val</span> metaSolver_with_cost</span> : <code class="type">SP.num -&gt; int -&gt; (int -&gt; 'a -&gt; SP.solution list) -&gt; 'a -&gt; SP.solution list</code></pre><div class="info ">
+<div class="info-desc">
+<p>A meta backtracking solver with a depth limit, hence avoiding infinite searches as well as ensuring the minimal solution, in the number of transformations, within a given cost, are found.</p>
+
+<p><b>Post-condition.</b></p>
+
+<ul>
+<li>For any solution, the sequence of transformations is indeed a solution.</li>
+</ul>
+<ul>
+<li>No solution can be of length greater than the limit.</li>
+</ul>
+<ul>
+<li>Solutions appear in non-decreasing lengths.</li>
+</ul>
+<p><b>Nota.</b>  These post-conditions have to be ensured by any specific implementation.</p>
+</div>
+<ul class="info-attributes">
+<li><b>Returns</b> a list of solutions, each one being a list of transformations to apply in sequence from the initial state in order to reach a final state, i.e., solve the problem at hand</li>
+</ul>
+</div>
+<div class="param_info"><table border="0" cellpadding="3" width="100%">
+<tr>
+<td align="left" valign="top" width="1%"><b>Parameters: </b></td>
+<td>
+<table class="paramstable">
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+c</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">SP.num</code><div>
+the maximal acceptable cost
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+dMax</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">int</code><div>
+the maximal depth at which the search can be conducted from the initial state
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+solver</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">int -&gt; 'a -&gt; SP.solution list</code><div>
+a solver that accepts a depth limit as its first parameter
+</tr>
+<tr>
+<td align="center" valign="top" width="15%" class="code">
+i</td>
+<td align="center" valign="top">:</td>
+<td><div class="paramer-type">
+<code class="type">'a</code><div>
+an initial state
+</tr>
+</table>
+</td>
+</tr>
+</table></div>
+</body></html>

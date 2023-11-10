@@ -1,0 +1,103 @@
+<html><head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Miscellaneous" rel="Chapter" href="Miscellaneous.html">
+<link title="Pairs" rel="Chapter" href="Pairs.html">
+<link title="Additive" rel="Chapter" href="Additive.html">
+<link title="Ord" rel="Chapter" href="Ord.html">
+<link title="StateProblem" rel="Chapter" href="StateProblem.html">
+<link title="DepthLimit" rel="Chapter" href="DepthLimit.html">
+<link title="Naive" rel="Chapter" href="Naive.html">
+<link title="Meta" rel="Chapter" href="Meta.html">
+<link title="IDS" rel="Chapter" href="IDS.html"><title>StateProblem.STATEPROBLEM</title>
+</head>
+<body>
+<code class="code"><span class="keyword">sig</span><br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;state<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;op<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;num<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;transition&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;startState&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;operation&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.op;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;endState&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cost&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.num;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;successors&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.transition&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;state_problem&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;successors&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.successors;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;isFinalState&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;extension_state_problem&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;states&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;theInitialState&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;finalStates&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;edges&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.op&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.num)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mkExtensionStateProblem&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ss:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;i:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;fs:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;es:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.op&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.num)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.extension_state_problem<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;isExtensionStateProblem&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.extension_state_problem&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;solution&nbsp;=&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.transition&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;isSolution&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;t:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.transition&nbsp;list)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;f:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;i:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;ts:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.solution&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;solutionCost&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.solution&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.num<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;childrenStates&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;p:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.extension_state_problem&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.transition&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;isAFinalState&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.extension_state_problem&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;build&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;n:int&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;t:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.successors&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;f:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;i:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;ss:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;os:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.op&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.num)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;q:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;list&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.op&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;*&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.num)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;extension2comprehension&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.extension_state_problem&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state_problem<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;comprehension2extension&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;n:int&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;t:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.transition&nbsp;list)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;f:(<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;i:<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.extension_state_problem<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_state&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_op&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.op&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_transition&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.transition&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_solution&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.solution&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;short_solution&nbsp;:&nbsp;<span class="constructor">StateProblem</span>.<span class="constructor">STATEPROBLEM</span>.solution&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+<span class="keyword">end</span></code></body></html>

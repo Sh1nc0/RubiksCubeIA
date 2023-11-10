@@ -1,0 +1,42 @@
+Problem/StateProblem.cmo : \
+    Utilities/Ord.cmo \
+    Utilities/Miscellaneous.cmi \
+    Utilities/Additive.cmo
+Problem/StateProblem.cmx : \
+    Utilities/Ord.cmx \
+    Utilities/Miscellaneous.cmx \
+    Utilities/Additive.cmx
+Solver/IteratedDeepening/Meta.cmo : \
+    Problem/StateProblem.cmo
+Solver/IteratedDeepening/Meta.cmx : \
+    Problem/StateProblem.cmx
+Solver/IteratedDeepeningTree/IDS.cmo : \
+    Problem/StateProblem.cmo \
+    Solver/IteratedDeepening/Meta.cmo \
+    Solver/Tree/DepthLimit.cmo
+Solver/IteratedDeepeningTree/IDS.cmx : \
+    Problem/StateProblem.cmx \
+    Solver/IteratedDeepening/Meta.cmx \
+    Solver/Tree/DepthLimit.cmx
+Solver/Tree/DepthLimit.cmo : \
+    Problem/StateProblem.cmo
+Solver/Tree/DepthLimit.cmx : \
+    Problem/StateProblem.cmx
+Solver/Tree/Naive.cmo : \
+    Problem/StateProblem.cmo
+Solver/Tree/Naive.cmx : \
+    Problem/StateProblem.cmx
+Utilities/Additive.cmo :
+Utilities/Additive.cmx :
+Utilities/Miscellaneous.cmo : \
+    Utilities/Miscellaneous.cmi
+Utilities/Miscellaneous.cmx : \
+    Utilities/Miscellaneous.cmi
+Utilities/Miscellaneous.cmi :
+Utilities/Ord.cmo :
+Utilities/Ord.cmx :
+Utilities/Pairs.cmo : \
+    Utilities/Pairs.cmi
+Utilities/Pairs.cmx : \
+    Utilities/Pairs.cmi
+Utilities/Pairs.cmi :

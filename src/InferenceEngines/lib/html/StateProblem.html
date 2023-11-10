@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Ord.html">
+<link rel="next" href="DepthLimit.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Miscellaneous" rel="Chapter" href="Miscellaneous.html">
+<link title="Pairs" rel="Chapter" href="Pairs.html">
+<link title="Additive" rel="Chapter" href="Additive.html">
+<link title="Ord" rel="Chapter" href="Ord.html">
+<link title="StateProblem" rel="Chapter" href="StateProblem.html">
+<link title="DepthLimit" rel="Chapter" href="DepthLimit.html">
+<link title="Naive" rel="Chapter" href="Naive.html">
+<link title="Meta" rel="Chapter" href="Meta.html">
+<link title="IDS" rel="Chapter" href="IDS.html"><link title="Signatures of Parameter Modules" rel="Section" href="#2_SignaturesofParameterModules">
+<link title="Signature of STATEPROBLEM Modules" rel="Section" href="#2_SignatureofSTATEPROBLEMModules">
+<link title="Functor" rel="Section" href="#2_Functor">
+<title>StateProblem</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Ord.html" title="Ord">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="DepthLimit.html" title="DepthLimit">Next</a>
+</div>
+<h1>Module <a href="type_StateProblem.html">StateProblem</a></h1>
+
+<pre><span id="MODULEStateProblem"><span class="keyword">module</span> StateProblem</span>: <code class="code">sig</code> <a href="StateProblem.html">..</a> <code class="code">end</code></pre><div class="info module top">
+<div class="info-desc">
+<p>Formalisation of State Problems to be Solved by Inference Engines</p>
+</div>
+</div>
+<hr width="100%">
+<p><b>Copyright  :</b>  (c) February 28, 2019, September 7, 2023, José Martinez, École polytechnique de l'université de Nantes</p>
+
+<p><b>License    :</b>  AllRightsReserved</p>
+
+<p><b>Maintainer :</b>  Julien Cohen for the Ocaml version</p>
+
+<p><b>Stability  :</b>  Experimental, Linux</p>
+
+<p><b>Portability:</b> OCaml 4.14.0 / 5.1.0</p>
+
+<p>In Artificial Intelligence, a generic search problem in a state graph can be formalised as follows:</p>
+
+<ul>
+<li>A 'StateProblem' is defined in any way that best fits the problem to solve, from a single value, e.g., a string, to a complex "database" of facts and unknowns.</li>
+<li>An initial state can be defined, though this is only one possible instance of a class of problems to solve.</li>
+<li>In contrast, 'finalStates' must exist for the problem to be possibly solvable, indirectly defined thanks to the 'isFinalState' predicate.</li>
+<li>Of most importance is the definition of the directed edges between states through the multi-valued 'successors' function, returning both:<ul>
+<li>the list of successor states, along with</li>
+<li>their label that consists of:<ul>
+<li>a description, and</li>
+<li>a cost.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p>Solving a problem is nothing more than looking for a path in a labelled graph from an initial state to some final one, if it exists and if it is reachable!</p>
+
+<p>The main point is that this graph can be /infinite/.
+Even when it is not infinite, it can be of an /exponential/ size.
+Therefore, it is defined in a functional way, i.e., in /comprehension/, rather than provided as a value, i.e., as an extension of nodes and edges.</p>
+
+<p><b>Nota. </b>
+   For testing purposes, it is possible to transform a value into functions.
+   This is the role of the function 'comprehension2extension' of this module.
+   Conversely, should the graph be finite, it is possible to rebuild its value by actually traversing all the nodes and edges.
+   If infinite, it is still possible to rebuilt a (partial) sub-graph.
+   This is the role of the companion function 'extension2comprehension'.
+   In fact, this is nothing more than the role of all the search algorithms:  build a /minimal partial sub-graph/ of the whole graph that still exhibits a good solution!</p>
+<h3 id="2_SignaturesofParameterModules">Signatures of Parameter Modules</h3>
+<pre><span id="MODULETYPESTATE"><span class="keyword">module type</span> <a href="StateProblem.STATE.html">STATE</a></span> = <code class="code">sig</code> <a href="StateProblem.STATE.html">..</a> <code class="code">end</code></pre>
+<pre><span id="MODULETYPEOPERATION"><span class="keyword">module type</span> <a href="StateProblem.OPERATION.html">OPERATION</a></span> = <code class="code">sig</code> <a href="StateProblem.OPERATION.html">..</a> <code class="code">end</code></pre><h3 id="2_SignatureofSTATEPROBLEMModules">Signature of STATEPROBLEM Modules</h3>
+<pre><span id="MODULETYPESTATEPROBLEM"><span class="keyword">module type</span> <a href="StateProblem.STATEPROBLEM.html">STATEPROBLEM</a></span> = <code class="code">sig</code> <a href="StateProblem.STATEPROBLEM.html">..</a> <code class="code">end</code></pre><div class="info">
+<p>The module signature <code class="code">STATEPROBLEM</code> is a common interface for problems to be solved by different solvers.</p>
+
+</div>
+<h3 id="2_Functor">Functor</h3>
+<pre><span id="MODULEStateProblem"><span class="keyword">module</span> <a href="StateProblem.StateProblem.html">StateProblem</a></span> <code class="code">(</code><code class="code">S</code><code class="code"> : </code><code class="type"><a href="StateProblem.STATE.html">STATE</a></code><code class="code">) </code> <code class="code">(</code><code class="code">D</code><code class="code"> : </code><code class="type"><a href="StateProblem.OPERATION.html">OPERATION</a></code><code class="code">) </code> <code class="code">(</code><code class="code">C</code><code class="code"> : </code><code class="type"><a href="Additive.ADDITIVE.html">Additive.ADDITIVE</a></code><code class="code">) </code>: <code class="code">sig</code> <a href="StateProblem.StateProblem.html">..</a> <code class="code">end</code></pre><div class="info">
+<p>The functor <code class="code">StateProblem</code> takes three modules that describe basic types and builds a module with the convenient signature <code class="code">STATEPROBLEM</code> to be used with solvers.</p>
+
+</div>
+</body></html>
