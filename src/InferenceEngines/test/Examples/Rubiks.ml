@@ -20,12 +20,12 @@ let rec take = function
   ([], _) -> []
   | (x::xs, c) -> if c > 0 then x :: take(xs, c - 1) else []
 
-let cycle_right l i =
-  let len = List.length l in
-  let i = (len - (i mod len)) mod len in
-  cat (skip (l, i), take (l, i))
+let cycle_right (lst: 'a list) (n: int) =
+  let len = List.length lst in
+  let i = (len - (n mod len)) mod len in
+  cat (skip (lst, i), take (lst, i))
 
-let rec split lst n =
+let rec split (lst: 'a list) (n: int) : ('a list * 'a list) =
   if n = 0 then
     ([], lst)
   else
@@ -50,7 +50,7 @@ let etat_final : piece list = [
   (O 'o', 1); (O 'o', 2); (O 'o', 3); (O 'o', 4); (*20, 21, 22, 23*)
 ]
 
-let indice_rotation x = match x with
+let indice_rotation (face: face) : int list = match face with
   | UP -> [0; 1; 2; 3; 7; 6; 8; 11; 13; 12; 18; 17]
   | DOWN -> [21; 20; 23; 22; 4; 5; 9; 10; 14; 15; 19; 16]
   | RIGHT -> [11; 8; 9; 10; 2; 1; 6; 5; 20; 23; 14; 13]
@@ -58,12 +58,12 @@ let indice_rotation x = match x with
   | FRONT -> [12; 13; 14; 15; 3; 2; 11; 10; 23; 22; 19; 18]
   | BACK -> [6; 7; 4; 5; 1; 0; 17; 16; 21; 20; 9; 8]
 
-let rec extraire_pieces indices s =
+let rec extraire_pieces (indices: int list) (s: piece list) : piece list=
   match indices with
   | [] -> []
   | i :: tail -> (List.nth s i) :: extraire_pieces tail s
 
-let rec rotation_angle angle s =
+let rec rotation_angle (angle: int) (s: piece list) : piece list =
   match angle with
   | 90 ->
     let (r, l) = split s 4 in
@@ -75,7 +75,7 @@ let rec rotation_angle angle s =
   | 180 -> rotation_angle 90 (rotation_angle 90 s)
   | _ -> raise (Failure "Angle invalide")
 
-let rotation face angle s =
+let rotation (face: face) (angle: int) (s: piece list) : piece list =
   let indices = indice_rotation face in
   let pieces = extraire_pieces indices s in
   let rotated_pieces = rotation_angle angle pieces in
@@ -87,19 +87,14 @@ let rotation face angle s =
   in
   remplacer_pieces indices rotated_pieces s
 
-
-let extraire_caracteres (liste_pieces : piece list) : char list =
+let extraire_caracteres (s : piece list) : char list =
     List.map (fun (couleur, _) ->
       match couleur with
       | R c | G c | B c | Y c | W c | O c -> c
-    ) liste_pieces
+    ) s
 
-let afficher_liste_caracteres liste =
-  List.iter (fun c -> Printf.printf "%c " c) liste;
-  print_newline ()
-
-let pretty_print cube =
-  let chars = extraire_caracteres cube in
+let pretty_print (s: piece list) : unit =
+  let chars = extraire_caracteres s in
   let i index = (List.nth chars index) in
   Printf.printf "    %c %c\n" (i 4) (i 5);
   Printf.printf "    %c %c\n" (i 7) (i 6) ;
@@ -109,9 +104,16 @@ let pretty_print cube =
   Printf.printf "    %c %c\n" (i 15) (i 14);
   print_newline ()
 
+let rec shuffle (s: piece list) (n: int) =
+  let moves = [UP; DOWN; LEFT; RIGHT; FRONT; BACK] in
+  let rotations = [90; -90; 180] in
+  if n = 0 then s
+  else
+    let m = List.nth moves (Random.int 6) in
+    let r = List.nth rotations (Random.int 3) in
+    shuffle (rotation m r s) (n - 1)
 
 let () =
   pretty_print etat_final;
-  let rotated_cube  = rotation RIGHT 90 etat_final in
+  let rotated_cube  = shuffle etat_final 1 in
   pretty_print rotated_cube;
-
