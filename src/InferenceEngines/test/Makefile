@@ -16,8 +16,8 @@ OCAMLFLAGS=$(INCLUDES) $(LIB_INCLUDES) $(LOCAL_INCLUDES)
 # units: mod1, mod2 and mod3.
 
 # The list of object files for prog1
-PROG1_OBJS= Examples/Klotski.cmo InferenceEnginesTests.cmo
-PROG1_XOBJS= Examples/Klotski.cmx InferenceEnginesTests.cmx
+PROG1_OBJS= Examples/Rubiks.cmo RubiksTest.cmo
+PROG1_XOBJS= Examples/Rubiks.cmx RubiksTest.cmx
 
 prog1: $(PROG1_OBJS)
 	$(OCAMLC) -o $@ $(OCAMLFLAGS) $(LIBRARIES) $(PROG1_OBJS)
