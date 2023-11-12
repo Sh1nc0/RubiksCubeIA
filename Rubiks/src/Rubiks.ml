@@ -1,3 +1,6 @@
+(** The Rubiks Puzzle *)
+
+
 (* ###### MARK: TYPES ######*)
 (* red, green, blue, yellow, orange, white *)
 type couleur = R of char | G of char | B of char | Y of char | O of char | W of char
@@ -146,6 +149,12 @@ let rotation (face: face) (angle: int) (s: r_state) : piece list =
   in
   remplacer_pieces indices rotated_pieces k
 
+(**
+  The transitions consist of four kinds of operations described by 'Move'.
+ 
+ The cost is always one.
+@param s, a state 
+@return the transitions that can be expanded from s with the application of a single operation *)
 let moves s =
     let moves = [UP 'U'; DOWN 'D'; LEFT 'L'; RIGHT 'R'; FRONT 'F'; BACK 'B'] in
     let angles = [90; -90; 180] in

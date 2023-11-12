@@ -73,6 +73,8 @@ depend:
 
 include .depend
 
+lib: 
+	touch .depend && make depend && make
 
 .PHONY: depend doc
 

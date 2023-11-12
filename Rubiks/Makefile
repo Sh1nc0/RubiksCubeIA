@@ -2,26 +2,29 @@ OCAMLC=ocamlc
 OCAMLOPT=ocamlopt
 OCAMLDEP=ocamldep
 BATTERIES = `ocamlfind query batteries`
-LIBRARIES =  ../lib/lib1.cma 
-XLIBRARIES =  unix.cmxa nums.cmxa batteries.cmxa batteries_unthreaded.cmxa ../lib/lib1.cmxa
+LIBRARIES =  lib/lib1.cma 
+XLIBRARIES =  unix.cmxa nums.cmxa batteries.cmxa batteries_unthreaded.cmxa lib/lib1.cmxa
 
-LIB = ../lib
+LIB = lib
 LIB_INCLUDES = -I $(LIB)/Utilities -I $(LIB)/Problem -I $(LIB)/Solver/Tree -I $(LIB)/Solver/IteratedDeepening -I $(LIB)/Solver/IteratedDeepeningTree 
-LOCAL_INCLUDES = -I Examples  
+LOCAL_INCLUDES = -I src
 INCLUDES=  -I +unix -I $(BATTERIES) -I $(BATTERIES)/unthreaded 
 OCAMLFLAGS=$(INCLUDES) $(LIB_INCLUDES) $(LOCAL_INCLUDES)    
 
+doc:
+	ocamldoc -d html -charset utf8 -html $(OCAMLFLAGS) \
+	src/*.ml 
 
 # prog1 should be compiled to bytecode, and is composed of three
 # units: mod1, mod2 and mod3.
 
 # The list of object files for prog1
-PROG1_OBJS= Examples/Rubiks.cmo RubiksTest.cmo
-PROG1_XOBJS= Examples/Rubiks.cmx RubiksTest.cmx
+PROG1_OBJS= src/Rubiks.cmo RubiksTest.cmo
+PROG1_XOBJS= src/Rubiks.cmx RubiksTest.cmx
 
-prog1: $(PROG1_OBJS)
+rubiks: $(PROG1_OBJS)
 	$(OCAMLC) -o $@ $(OCAMLFLAGS) $(LIBRARIES) $(PROG1_OBJS)
-prog1.opt: $(PROG1_XOBJS)
+rubiks.opt: $(PROG1_XOBJS)
 	$(OCAMLOPT) -o $@ $(OCAMLFLAGS) $(XLIBRARIES) $(PROG1_XOBJS)
 
 
@@ -44,10 +47,10 @@ clean:
 	rm -f */*.cmi
 
 # Test
-test: prog1
-	./prog1
-xtest: prog1.opt
-	./prog1.opt
+test: rubiks
+	./rubiks
+xtest: rubiks.opt
+	./rubiks.opt
 
 # Dependencies
 depend:
@@ -56,7 +59,5 @@ depend:
 include .depend
 
 # Documentation
-doc:
-	ocamldoc -d html -charset utf8 -html $(OCAMLFLAGS) \
-	Examples/*.ml 
+
 
