@@ -185,6 +185,6 @@ let rec shuffle (s: r_state) (n: int) =
 
 
 
-let shuffled_cube = shuffle {unState = etat_final} 3
+let shuffled_cube = shuffle {unState = etat_final} 5
 
 let rubiks_flag = 1

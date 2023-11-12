@@ -1,4 +1,0 @@
-InferenceEnginesTests.cmo : \
-    Examples/Klotski.cmo
-InferenceEnginesTests.cmx : \
-    Examples/Klotski.cmx
