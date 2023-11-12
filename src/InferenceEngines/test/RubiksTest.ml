@@ -31,6 +31,10 @@ let limit_rubiks n p = DL.solver n Rubiks.moves  Rubiks.isSolved p
 
 let res_l = limit_rubiks prof Rubiks.shuffled_cube
 
+let _ = Rubiks.pretty_print Rubiks.shuffled_cube.unState
+
+
+
 let _ = oracle res_l
 
 let _ = print_newline ()

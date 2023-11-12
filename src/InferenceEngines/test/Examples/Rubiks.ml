@@ -13,6 +13,8 @@ type face =
   | FRONT of identifier
   | BACK of identifier
 
+type operation = (face * string)
+
 (* ###### MARK: FONCTIONS UTILES ######*)
 
 let rec cat = function
@@ -59,13 +61,19 @@ let string_of_state { unState } =
   in
   string_of_state_aux unState
 
-let string_of_move = function
-  | UP pid -> Char.escaped pid ^ "U"
-  | DOWN pid -> Char.escaped pid ^ "D"
-  | LEFT pid -> Char.escaped pid ^ "L"
-  | RIGHT pid -> Char.escaped pid ^ "R"
-  | FRONT pid -> Char.escaped pid ^ "F"
-  | BACK pid -> Char.escaped pid ^ "B"
+let string_of_move (face , a) = match face with
+  | UP pid -> Char.escaped pid ^ a
+  | DOWN pid -> Char.escaped pid ^ a
+  | LEFT pid -> Char.escaped pid ^ a
+  | RIGHT pid -> Char.escaped pid ^ a
+  | FRONT pid -> Char.escaped pid ^ a
+  | BACK pid -> Char.escaped pid ^ a
+
+let string_of_angle = function
+| 90 -> ""
+| -90 -> "'"
+| 180 -> "2"
+| _ -> raise (Failure "Angle invalide")
 
 let etat_final : piece list = [
   (W 'w', 1); (W 'w', 2); (Y 'w', 3); (W 'w', 4); (*0, 1, 2, 3*)
@@ -118,7 +126,7 @@ module RubiksProblem =
     let string_of_state  = string_of_state
   end)
   (struct
-    type op = face
+    type op = operation
     let string_of_op = string_of_move
   end)
   (Additive.IntC)
@@ -139,13 +147,13 @@ let rotation (face: face) (angle: int) (s: r_state) : piece list =
   remplacer_pieces indices rotated_pieces k
 
 let moves s =
-    let moves = [UP 'u'; DOWN 'd'; LEFT 'l'; RIGHT 'r'; FRONT 'f'; BACK 'b'] in
+    let moves = [UP 'U'; DOWN 'D'; LEFT 'L'; RIGHT 'R'; FRONT 'F'; BACK 'B'] in
     let angles = [90; -90; 180] in
 
     let generate_transition_from_move angle move =
       let end_state = rotation move angle s in
       { RubiksProblem.startState = s;
-        operation = move;
+        operation = (move, string_of_angle angle);
         endState = {unState = end_state};
         cost = 1;
       } in
@@ -164,15 +172,6 @@ let pretty_print (s: piece list) : unit =
   Printf.printf "    %c %c\n" (i 12) (i 13);
   Printf.printf "    %c %c\n" (i 15) (i 14);
   print_newline ()
-(* 
-let rec shuffle (s: r_state) (n: int) =
-  let moves = [UP 'u'; DOWN 'd'; LEFT 'l'; RIGHT 'r'; FRONT 'f'; BACK 'b'] in
-  let rotations = [90; -90; 180] in
-  if n = 0 then s
-  else
-    let m = List.nth moves (Random.int 6) in
-    let r = List.nth rotations (Random.int 3) in
-    shuffle (rotation m r s) (n - 1) *)
 
 let rec shuffle (s: r_state) (n: int) =
   let moves = [UP 'u'; DOWN 'd'; LEFT 'l'; RIGHT 'r'; FRONT 'f'; BACK 'b'] in
@@ -186,10 +185,6 @@ let rec shuffle (s: r_state) (n: int) =
 
 
 
-let shuffled_cube = shuffle {unState = etat_final} 2
+let shuffled_cube = shuffle {unState = etat_final} 3
 
 let rubiks_flag = 1
-
-(* let () =
-    string_of_state shuffled_cube |> print_endline;
-    pretty_print shuffled_cube.unState; *)
