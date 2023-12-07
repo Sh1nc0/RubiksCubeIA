@@ -1,7 +1,18 @@
 (** The Rubiks Puzzle *)
+(**
+{b Maintainer :} PIPON Romain & LEBRETON Thomas
+
+{b Stability :} Experimental
+
+{b Portability :} OCaml 4.14.0
+
+{b Description :}
+This module implements the Rubiks Puzzle. It is a 2x2x2 Rubik's cube.
+This is not the most efficient and we get difficulties to go more than depth 4/5.
+*)
 
 (* ###### MARK: TYPES ######*)
-(* red, green, blue, yellow, orange, white *)
+(** red, green, blue, yellow, orange, white *)
 type couleur = R of char | G of char | B of char | Y of char | O of char | W of char
 
 type piece = (couleur * int)
@@ -21,28 +32,28 @@ type r_state = {unState : piece list; lastOp : ((face * int) option)}
 
 (* ###### MARK: FONCTIONS UTILES ######*)
 
-(* Function to concatenate two lists *)
+(** Function to concatenate two lists *)
 let rec cat = function
   ([], y) -> y
   | (x::xs, y) -> x :: cat (xs, y)
 
-(* Function to skip elements in a list *)
+(** Function to skip elements in a list *)
 let rec skip = function
   ([], _) -> []
   | (_::xs as xs1, c) -> if c > 0 then skip(xs, c - 1) else xs1
 
-(* Function to take elements from the beginning of a list *)
+(** Function to take elements from the beginning of a list *)
 let rec take = function
   ([], _) -> []
   | (x::xs, c) -> if c > 0 then x :: take(xs, c - 1) else []
 
-(* Function to cycle a list to the right *)
+(** Function to cycle a list to the right *)
 let cycle_right (lst: 'a list) (n: int) =
   let len = List.length lst in
   let i = (len - (n mod len)) mod len in
   cat (skip (lst, i), take (lst, i))
 
-(* Function to split a list at a given position *)
+(** Function to split a list at a given position *)
 let rec split (lst: 'a list) (n: int) : ('a list * 'a list) =
   if n = 0 then
     ([], lst)
@@ -59,7 +70,7 @@ let rec split (lst: 'a list) (n: int) : ('a list * 'a list) =
 
 (* ###### MARK: FONCTIONS LIE AU RUBIKS ######*)
 
-(* Function to *)
+(** Function to convert a state to string*)
 let string_of_state { unState } =
   let rec string_of_state_aux = function
     | [] -> ""
@@ -68,6 +79,7 @@ let string_of_state { unState } =
   in
   string_of_state_aux unState
 
+(** Function to convert a move to string*)
 let string_of_move (face , a) = match face with
   | UP pid -> Char.escaped pid ^ a
   | DOWN pid -> Char.escaped pid ^ a
@@ -76,12 +88,14 @@ let string_of_move (face , a) = match face with
   | FRONT pid -> Char.escaped pid ^ a
   | BACK pid -> Char.escaped pid ^ a
 
+(** Function to convert an angle to string*)
 let string_of_angle = function
 | 90 -> ""
 | -90 -> "'"
 | 180 -> "2"
 | _ -> raise (Failure "Angle invalide")
 
+(** Function that describe one final state*)
 let etat_final : piece list = [
   (W 'w', 1); (W 'w', 2); (Y 'w', 3); (W 'w', 4); (*0, 1, 2, 3*)
   (R 'r', 1); (R 'r', 2); (R 'r', 3); (R 'r', 4); (*4, 5, 6, 7*)
@@ -110,7 +124,7 @@ let isSolved {unState} = match extraire_caracteres unState with
 
 (* ###### MARK: PROBLEM ######*)
 
-(* Building a state problem *)
+(** Building a state problem *)
 module RubiksProblem = 
 ( StateProblem.StateProblem
   (struct
@@ -124,7 +138,7 @@ module RubiksProblem =
   (Additive.IntC)
 )
 
-(* Function to get the indices of the faces that need to be rotated *)
+(** Function to get the indices of the faces that need to be rotated *)
 let indice_rotation (face: face) : int list = match face with
   | UP pid -> [0; 1; 2; 3; 7; 6; 8; 11; 13; 12; 18; 17]
   | DOWN pid-> [21; 20; 23; 22; 4; 5; 9; 10; 14; 15; 19; 16]
@@ -133,11 +147,13 @@ let indice_rotation (face: face) : int list = match face with
   | FRONT pid -> [12; 13; 14; 15; 3; 2; 11; 10; 23; 22; 19; 18]
   | BACK pid -> [6; 7; 4; 5; 1; 0; 17; 16; 21; 20; 9; 8]
 
+(** Function to extract the pieces that need to be rotated *)
 let rec extraire_pieces (indices: int list) (s: piece list) : piece list=
   match indices with
   | [] -> []
   | i :: tail -> (List.nth s i) :: extraire_pieces tail s
 
+(** Function to rotate the pieces *)
 let rec rotation_angle (angle: int) (s: piece list) : piece list =
   match angle with
   | 90 ->
@@ -150,6 +166,7 @@ let rec rotation_angle (angle: int) (s: piece list) : piece list =
   | 180 -> rotation_angle 90 (rotation_angle 90 s)
   | _ -> raise (Failure "Angle invalide")
 
+(** Function to rotate the cube *)
 let rotation (face: face) (angle: int) (s: r_state) : piece list =
   let k = s.unState in
   let indices = indice_rotation face in
@@ -163,6 +180,7 @@ let rotation (face: face) (angle: int) (s: r_state) : piece list =
   in
   remplacer_pieces indices rotated_pieces k
 
+(** Function to generate the transitions *)
 let moves {unState; lastOp} =
     let moves = [UP 'U'; DOWN 'D'; LEFT 'L'; RIGHT 'R'; FRONT 'F'; BACK 'B'] in
     let angles = [90; -90; 180] in
@@ -179,6 +197,7 @@ let moves {unState; lastOp} =
       in
       List.flatten (List.map generate_transition_for angles)
 
+(** Function to get the mirror move *)
 let inverse_move (move: (face * int)) : (face * int) =
   let (face, angle) = move in
   let new_angle = match angle with
@@ -189,7 +208,7 @@ let inverse_move (move: (face * int)) : (face * int) =
   in
   (face, new_angle)
 
-
+(** Function du pretty print the cube*)
 let pretty_print (s: piece list) : unit =
   let chars = extraire_caracteres s in
   let i index = (List.nth chars index) in
@@ -201,6 +220,7 @@ let pretty_print (s: piece list) : unit =
   Printf.printf "    %c %c\n" (i 15) (i 14);
   print_newline ()
 
+(** Function to shuffle the cube *)
 let rec shuffle (s: r_state) (n: int) =
   let moves = [UP 'u'; DOWN 'd'; LEFT 'l'; RIGHT 'r'; FRONT 'f'; BACK 'b'] in
   let rotations = [90; -90; 180] in
@@ -213,16 +233,10 @@ let rec shuffle (s: r_state) (n: int) =
     shuffle {unState = s; lastOp= Some (m, r)} (n - 1)
 
 
+(* ###### MARKS: some cubes ###### *)
 
+(** A cube randomly shuffled by 4*)
 let shuffled_cube = shuffle {unState = etat_final; lastOp=None} 4
-
-let heuristic ps =
-  let rec count = function
-    | [] -> 0
-    | (c, _) :: tail -> (match c with
-      | R c | G c | B c | Y c | O c | W c -> if c = 'w' then 1 + count tail else count tail)
-  in
-  count ps.unState
 
 
 let rubiks_flag = 1
