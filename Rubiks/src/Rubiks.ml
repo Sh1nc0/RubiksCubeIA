@@ -235,8 +235,16 @@ let rec shuffle (s: r_state) (n: int) =
 
 (* ###### MARKS: some cubes ###### *)
 
-(** A cube randomly shuffled by 4*)
-let shuffled_cube = shuffle {unState = etat_final; lastOp=None} 4
+(** A simple cube suffled 2 time Up 90 and Righ -90 *)
+let simple_cube = {unState = (rotation (RIGHT 'R') (-90) {unState = (rotation (UP 'U') 90 {unState = etat_final; lastOp=None}); lastOp=None}); lastOp=None}
+
+(** A cube randomly shuffled by 2*)
+
+(** A cube randomly shuffled by 3*)
+let shuffled_cube = shuffle {unState = etat_final; lastOp=None} 3
+
+(** A cube randomly shuffled by 5*)
+let shuffled_cube2 = shuffle {unState = etat_final; lastOp=None} 5
 
 
 let rubiks_flag = 1
