@@ -74,4 +74,8 @@ setup.log
 # Local OPAM switch
 _opam/
 
+*.depend
+
+doc/*
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,ocaml
