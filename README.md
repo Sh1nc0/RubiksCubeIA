@@ -1,50 +1,33 @@
-# bibliotheque_intelligence_artificielle
+# Intelligence Artificielle - Rubik's Cube 2x2x2
 
+# Auteurs:
+- PIPON Romain [ romain.pipon@etu.univ-nantes.fr ]
+- LEBRETON Thomas [ thomas.lebreton@etu.univ-nantes.fr ]
 
+## Dépendances :
 
-**Dependencies :**
+- Dépend de la version 3.7.1 de la bibliothèque "Batteries included" : `(opam install batteries)`
 
-- depends on the "Batteries included" library version 3.7.1.
-    ( `opam install batteries` )
+Après l'installation de Batteries et à chaque ouverture du projet : `eval $(opam env)`
 
-After installation of batteries : `eval $(opam env)`		 
+## Commandes Make :
 
-**First compilation :**
+### Lib
+`make lib`
+Permet de construire les fichiers de bibliothèque utilisés dans le projet.
 
-- in the `lib` directory : `touch .depend && make depend && make`
+### rubiks
+`make rubiks`
+Construit les fichiers nécessaires à l'exécution du projet. Il s'assure que les fichiers de bibliothèque sont à jour.
 
-- If you want to proceed with the examples : in the `test` directory : `touch .depend && make depend && make test`
+### run
+`make run`
+Exécute les tests du projet après avoir construit les fichiers nécessaires au projet.
 
-**Build the HTML documentation :**
+### doc
+`make doc`
+Génère la documentation HTML du projet à partir des commentaires du code source. La documentation est placée dans le dossier **'doc'** à la racine du projet.
 
-- in `lib` directory, `mkdir html && make doc`
-
-
-**Use of the native-code compiler :**
-- in the lib directory : `make lib1.cmxa`
-- in the test directory : `make xtest`
-
-**OCaml language :**
-
-- We use functors to parameterize some algorithms by a bunch of types and functions. See the documentation or the tutorial for the concepts of module, module signatures and functors :
-https://v2.ocaml.org/manual/moduleexamples.html
-https://ocaml.org/docs/functors
-
-- We use labeled parameters to improve the documentations. See the documentation or the tutorial:
-https://v2.ocaml.org/manual/lablexamples.html
-https://ocaml.org/docs/labels
-
-
-
-**Problèmes à la compilation (en fonction des versions des outils et bibliothèques utilisés).**
-
-- Si la commande `ocamlfind query batteries` ne trouve pas la bibliothèque batteries alors que vous l'avez installée, faites `eval $(opam env)` dans la console avant de lancer les autres commandes. Après ceci, la commande `ocamlfind query batteries` indique le répertoire dans lequel cette bibliothèque est installée. Vous pouvez ajouter `eval $(opam env)` dans votre `.bashrc` ou équivalent.
-
-- Si le compilateur vous dit qu'il ne trouve pas `nums.cma`, il faut le localiser sur votre installation et mettre le chemin complet à la place du chemin relatif sur la ligne de commande (changer dans le `Makefile`). .
-
-- Idem pour `batteries.cma`.
-
-- Si le compilateur ne trouve pas `batteries_unthreaded.cma` et que ce fichier n'a pas été installé avec la bibliothèque batteries, retirez simplement ce fichier de la ligne de commande. (Explication : vous utilisez une version de la bibliothèque `batteries` antérieure à 3.7.1)
-
-- Si lors de la compilation de l'exemple, le compilateur se plaint de ne pas trouver `nums.cma`, ajouter dans la variable `LIBRARIES` du `Makefile` le chemin complet vers ce fichier, juste avant l'autre bibliothèque.
-
+### clean
+`make clean`
+Nettoie les fichiers générés lors de la construction, supprime les dépendances et le dossier de documentation.
